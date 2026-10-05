@@ -209,6 +209,20 @@ def test_label_encoder_errors():
     assert_raise_message(ValueError, msg, le.inverse_transform, [-2, -3, -4])
 
 
+def test_label_encoder_empty_array():
+    # Regression test: transform/inverse_transform of an empty list should
+    # always return an empty array, regardless of the dtype of classes_.
+    le = LabelEncoder()
+    le.fit(np.array([1, 2]))
+    assert_array_equal(le.transform([]), np.array([]))
+    assert_array_equal(le.inverse_transform([]), np.array([]))
+
+    le = LabelEncoder()
+    le.fit(np.array(["a", "b"]))
+    assert_array_equal(le.transform([]), np.array([]))
+    assert_array_equal(le.inverse_transform([]), np.array([]))
+
+
 def test_sparse_output_multilabel_binarizer():
     # test input as iterable of iterables
     inputs = [
